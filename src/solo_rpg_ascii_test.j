@@ -69,10 +69,15 @@ endfunction
 
 function InitSoloRPG takes nothing returns nothing
     local trigger t
+    call DisplayTextToPlayer(Player(0), 0., 0., "SR: entered InitSoloRPG")
+    if udg_srInitialized then
+        call DisplayTextToPlayer(Player(0), 0., 0., "SR: already initialized; skipping")
+    endif
     if udg_srInitialized then
         return
     endif
     set udg_srInitialized = true
+    call DisplayTextToPlayer(Player(0), 0., 0., "SR: creating triggers")
     set t = CreateTrigger()
     call TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_DEATH)
     call TriggerAddAction(t, function SRDeath)
@@ -87,7 +92,10 @@ function InitSoloRPG takes nothing returns nothing
     set t = CreateTrigger()
     call TriggerRegisterDialogEvent(t, udg_srDialog)
     call TriggerAddAction(t, function SRChoose)
+    call DisplayTextToPlayer(Player(0), 0., 0., "SR: dialog built")
+    call TriggerSleepAction(1.00)
     call DialogDisplay(Player(0), udg_srDialog, true)
+    call DisplayTextToPlayer(Player(0), 0., 0., "SR: dialog display called")
     call SRAddSpawn('nfel', 950., 400., false)
     call SRAddSpawn('nfel', 1150., 500., false)
     call SRAddSpawn('nfel', 1300., 650., true)
