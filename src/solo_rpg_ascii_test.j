@@ -67,6 +67,11 @@ function SRChat takes nothing returns nothing
     endif
 endfunction
 
+function SRShowDialog takes nothing returns nothing
+    call DialogDisplay(Player(0), udg_srDialog, true)
+    call DisplayTextToPlayer(Player(0), 0., 0., "SR: deferred dialog display")
+endfunction
+
 function InitSoloRPG takes nothing returns nothing
     local trigger t
     call DisplayTextToPlayer(Player(0), 0., 0., "SR: entered InitSoloRPG")
@@ -93,9 +98,8 @@ function InitSoloRPG takes nothing returns nothing
     call TriggerRegisterDialogEvent(t, udg_srDialog)
     call TriggerAddAction(t, function SRChoose)
     call DisplayTextToPlayer(Player(0), 0., 0., "SR: dialog built")
-    call TriggerSleepAction(1.00)
-    call DialogDisplay(Player(0), udg_srDialog, true)
-    call DisplayTextToPlayer(Player(0), 0., 0., "SR: dialog display called")
+    call TimerStart(CreateTimer(), 2.00, false, function SRShowDialog)
+    call DisplayTextToPlayer(Player(0), 0., 0., "SR: dialog scheduled")
     call SRAddSpawn('nfel', 950., 400., false)
     call SRAddSpawn('nfel', 1150., 500., false)
     call SRAddSpawn('nfel', 1300., 650., true)
